@@ -1,43 +1,76 @@
-import { collection, getDocs, addDoc } from "firebase/firestore";
-import { db, colRef } from './firebaseConfig';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import firebaseConfig from "./firebaseConfig.js";
 
-document.getElementById('loadTeams').addEventListener('click', async function() {
-    const teamsCol = collection(db, "teams");
-    const teamsSnapshot = await getDocs(teamsCol);
-    let teamsList = "";
-    teamsSnapshot.forEach((doc) => {
-        const teamData = doc.data();
-        teamsList += `<p>Team: ${teamData.name}, Players: ${teamData.players.join(', ')}</p>`;
-    });
-    document.getElementById('teams').innerHTML = teamsList;
-});
+// Initialize Firebase and Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// Example: Add a new team to the Firestore database
-addDoc(collection(db, "teams"), {
-    name: "Team Alpha",
-    players: ["Player 1", "Player 2", "Player 3"]
-})
-.then((docRef) => {
-    console.log("Team added with ID: ", docRef.id);
-})
-.catch((error) => {
-    console.error("Error adding team: ", error);
-});
+async function displayPlayers() {
+  const selectedSport = document.getElementById("sport-select").value;
+  const teams = { "team-A": [], "team-B": [] };
 
+  // Get player data from Firestore
+  const playersRef = collection(db, "players");
+  const playerSnapshot = await getDocs(playersRef);
 
-const addTeamForm = document.querySelector('.add')
-addTeamForm.addEventListener('submit', (e) => {
-    e.preventDefault()
+  playerSnapshot.forEach(playerDoc => {
+    const playerData = playerDoc.data();
+    const team = playerData.team === "Team A" ? "team-A" : "team-B";
 
-    addDoc(colRef, {
-        title: addTeamForm.title.value ,
-    })
-    .then(() => { 
-        addTeamForm.reset()
-    })
-})
+    // Only include players who play the selected sport
+    if (playerData.stats[selectedSport]) {
+      teams[team].push({
+        playerName: playerData.playerName,
+        stats: playerData.stats[selectedSport]
+      });
+    }
+  });
 
-const deleteTeamForm = document.querySelector('.delete')
-deleteTeamForm.addEventListener('submit', (e) => {
-    e.preventDefault()
-})
+  // Generate tables
+  ["team-A", "team-B"].forEach(teamId => {
+    const teamContainer = document.getElementById(teamId);
+    teamContainer.innerHTML = teams[teamId].length > 0
+      ? createTableHtml(teamId.replace("team-", "Team "), selectedSport, teams[teamId])
+      : `<p>No data available for ${teamId.replace("team-", "Team ")} in ${selectedSport}.</p>`;
+  });
+}
+
+function createTableHtml(teamName, sport, players) {
+  const sportHeaders = getSportHeaders(sport);
+  const headerHtml = sportHeaders.map(header => `<th>${header}</th>`).join('');
+  const rowsHtml = players.map(player => `
+    <tr>
+      <td>${player.playerName}</td>
+      ${sportHeaders.slice(1).map(header => `<td>${player.stats[header.toLowerCase()] || ''}</td>`).join('')}
+    </tr>
+  `).join('');
+
+  return `
+    <table>
+      <thead>
+        <tr><th colspan="${sportHeaders.length}">${teamName} - ${sport.charAt(0).toUpperCase() + sport.slice(1)}</th></tr>
+        <tr>${headerHtml}</tr>
+      </thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>
+  `;
+}
+
+function getSportHeaders(sport) {
+  switch (sport) {
+    case "basketball":
+      return ["Player", "Games Played", "Points", "Assists", "Rebounds"];
+    case "softball":
+      return ["Player", "Games Played", "At Bats", "Hits", "Strike Outs", "RBIs", "Batting Average"];
+    case "volleyball":
+      return ["Player", "Games Played", "Wins", "Losses", "Win Percentage"];
+    case "ultimate-frisbee":
+      return ["Player", "Games Played", "Points", "Assists", "Blocks"];
+    default:
+      return ["Player"];
+  }
+}
+
+// Initial load
+displayPlayers();

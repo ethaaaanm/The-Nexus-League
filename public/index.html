@@ -5,34 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Nexus League</title>
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .team-name {
-            text-align: left;
-            font-weight: bold;
-        }
-        .dropdown {
-            margin-bottom: 20px;
-        }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .team-name { text-align: left; font-weight: bold; }
+        .dropdown { margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <h2>Select a Sport:</h2>
 <div class="dropdown">
-    <select id="sport-select" onchange="updateTable()">
+    <select id="sport-select" onchange="displayPlayers()">
         <option value="basketball">Basketball</option>
         <option value="softball">Softball</option>
         <option value="volleyball">Volleyball</option>
@@ -40,143 +24,11 @@
     </select>
 </div>
 
-<table id="stats-table">
-    <thead>
-        <tr>
-            <th colspan="7" id="sport-name" class="team-name">Basketball</th>
-        </tr>
-        <tr id="table-headers">
-            <th>Player</th>
-            <th>Games Played</th>
-            <th>Points</th>
-            <th>Assists</th>
-            <th>Rebounds</th>
-        </tr>
-    </thead>
-    <tbody id="table-body">
-        <tr>
-            <td>Player #1</td><td>5</td><td>112</td><td>23</td><td>40</td>
-        <tr>
-            <td>Player #2</td><td>5</td><td>97</td><td>19</td><td>35</td>
-        </tr>
-        <tr>
-            <td>Player #3</td><td>5</td><td>130</td><td>25</td><td>42</td>
-        </tr>
-        <tr>
-            <td>Player #4</td><td>5</td><td>85</td><td>15</td><td>30</td>
-        </tr>
-        <tr>
-            <td>Player #5</td><td>5</td><td>105</td><td>20</td><td>38</td>
-        </tr>
-    </tbody>
-</table>
+<div id="team-tables">
+    <div id="team-A"></div>
+    <div id="team-B"></div>
+</div>
 
-<script>
-    function updateTable() {
-        const sport = document.getElementById("sport-select").value;
-        const sportName = document.getElementById("sport-name");
-        const headers = document.getElementById("table-headers");
-        const body = document.getElementById("table-body");
-
-        if (sport === "basketball") {
-            sportName.textContent = "Basketball";
-            headers.innerHTML = `
-                <th>Player</th>
-                <th>Games Played</th>
-                <th>Points</th>
-                <th>Assists</th>
-                <th>Rebounds</th>
-            `;
-            body.innerHTML = `
-                <tr><td>Player #1</td><td>5</td><td>112</td><td>23</td><td>40</td></tr>
-                <tr><td>Player #2</td><td>5</td><td>97</td><td>19</td><td>35</td></tr>
-                <tr><td>Player #3</td><td>5</td><td>130</td><td>25</td><td>42</td></tr>
-                <tr><td>Player #4</td><td>5</td><td>85</td><td>15</td><td>30</td></tr>
-                <tr><td>Player #5</td><td>5</td><td>105</td><td>20</td><td>38</td></tr>
-            `;
-        } else if (sport === "softball") {
-            sportName.textContent = "Softball";
-            headers.innerHTML = `
-                <th>Player</th>
-                <th>Games Played</th>
-                <th>At Bats</th>
-                <th>Hits</th>
-                <th>Strike Outs</th>
-                <th>RBIs</th>
-                <th>Batting Average</th>
-            `;
-            body.innerHTML = `
-                <tr><td>Player #1</td><td>5</td><td>4</td><td>8</td><td>3</td><td>5</td><td>.320</td></tr>
-                <tr><td>Player #2</td><td>5</td><td>4</td><td>7</td><td>4</td><td>6</td><td>.280</td></tr>
-                <tr><td>Player #3</td><td>5</td><td>4</td><td>10</td><td>2</td><td>8</td><td>.400</td></tr>
-                <tr><td>Player #4</td><td>5</td><td>4</td><td>6</td><td>5</td><td>4</td><td>.240</td></tr>
-                <tr><td>Player #5</td><td>5</td><td>4</td><td>9</td><td>3</td><td>7</td><td>.360</td></tr>
-            `;
-        } else if (sport === "volleyball") {
-            sportName.textContent = "Volleyball";
-            headers.innerHTML = `
-                <th>Player</th>
-                <th>Games Played</th>
-                <th>Wins</th>
-                <th>Losses</th>
-                <th>Win Percentage</th>
-            `;
-            body.innerHTML = `
-                <tr><td>Player #1</td><td>5</td><td>3</td><td>2</td><td>60%</td></tr>
-                <tr><td>Player #2</td><td>5</td><td>4</td><td>1</td><td>80%</td></tr>
-                <tr><td>Player #3</td><td>5</td><td>2</td><td>3</td><td>40%</td></tr>
-                <tr><td>Player #4</td><td>5</td><td>3</td><td>2</td><td>60%</td></tr>
-                <tr><td>Player #5</td><td>5</td><td>5</td><td>0</td><td>100%</td></tr>
-            `;
-        } else if (sport === "ultimate-frisbee") {
-            sportName.textContent = "Ultimate Frisbee";
-            headers.innerHTML = `
-                <th>Player</th>
-                <th>Games Played</th>
-                <th>Points</th>
-                <th>Assists</th>
-                <th>Blocks</th>
-            `;
-            body.innerHTML = `
-                <tr><td>Player #1</td><td>5</td><td>30</td><td>10</td><td>5</td></tr>
-                <tr><td>Player #2</td><td>5</td><td>28</td><td>12</td><td>6</td></tr>
-                <tr><td>Player #3</td><td>5</td><td>35</td><td>15</td><td>8</td></tr>
-                <tr><td>Player #4</td><td>5</td><td>22</td><td>9</td><td>4</td></tr>
-                <tr><td>Player #5</td><td>5</td><td>27</td><td>13</td><td>7</td></tr>
-            `;
-        }
-    }
-</script>
-
-<!-------************ GEMINI Firebase Test ***********------->
-<script>
-    // Get a reference to the "players" collection
-    const playersRef = db.collection("players");
-  
-    // Fetch all players
-    playersRef.get().then((snapshot) => {
-      snapshot.forEach((doc) => {
-        // Get player data
-        const playerData = doc.data();
-  
-        // Display player data in HTML (see next step)
-        // ...
-      });
-    });
-  </script>
-
-<div id="player-list"></div>
-
-
-<!-------************ GEMINI Firebase Test ***********------->
-
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-
-    <!-- Your Firebase config and custom scripts -->
-    <script src="firebaseConfig.js"></script>
-    <script src="app.js"></script>
+<script src="app.js" type="module"></script>
 </body>
 </html>
