@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Nexus League</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .team-name { text-align: left; font-weight: bold; }
+        .dropdown { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<button>
+    <a href="admin.html">Admin</a>
+</button>
+
+<h2>Select a Sport:</h2>
+<div class="controls">
+    <select id="sportsDropdown">
+        <option value="basketball">Basketball</option>
+        <option value="softball">Softball</option>
+        <option value="volleyball">Volleyball</option>
+        <option value="ultimate">Ultimate Frisbee</option>
+    </select>
+</div>
+
+<div id="tables">
+</div>
+
+<script src="app.js" type="module"></script>
+</body>
+</html>
