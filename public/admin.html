@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Nexus League</title>
+</head>
+<body>
+    <div id="adminSection" style="display: none;">
+        <h2>Admin Dashboard</h2>
+
+        <!-- Form to Add/Update Players -->
+        <form id="playerForm">
+            <h3>Add/Edit Player</h3>
+            <label for="playerName">Player Name:</label>
+            <input type="text" id="playerName" required>
+
+            <label for="team">Team:</label>
+            <select id="team">
+                <option value="teamA">Team A</option>
+                <option value="teamB">Team B</option>
+            </select>
+
+            <label for="sport">Sport:</label>
+            <select id="sport">
+                <option value="basketball">Basketball</option>
+                <option value="softball">Softball</option>
+                <option value="volleyball">Volleyball</option>
+                <option value="ultimate">Ultimate Frisbee</option>
+            </select>
+
+            <!-- Additional input fields for stats depending on the sport -->
+            <div id="statFields">
+                <!-- These will be dynamically generated based on the selected sport -->
+            </div>
+
+            <button type="submit">Save Player</button>
+        </form>
+    </div>
+
+    <button>
+        <a href="index.html">Save</a>
+    </button>
+</body>
+
+</html>
